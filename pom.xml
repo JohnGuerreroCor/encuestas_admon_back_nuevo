@@ -138,6 +138,11 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>usco.edu.co</groupId>
+			<artifactId>carnet-usuario</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

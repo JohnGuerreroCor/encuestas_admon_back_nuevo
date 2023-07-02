@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import com.usco.edu.dao.IAdministrativoDao;
+import com.usco.edu.dao.IAdministradorDao;
 import com.usco.edu.service.IAdministradorService;
 
 @Service
 public class AdministradorServiceImpl implements IAdministradorService {
 	
 	@Autowired
-	private IAdministrativoDao adminDao;
+	private IAdministradorDao adminDao;
 
 	@Override
 	public String getTokenInicioSesion(String atributos, String userdb) {

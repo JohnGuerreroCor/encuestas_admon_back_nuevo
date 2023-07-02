@@ -15,7 +15,7 @@ public class UsuarioRowMapper implements RowMapper<Usuario>{
 		Usuario user = new Usuario();
 		user.setId(rs.getInt("uid"));
 		user.setPassword(rs.getString("uwd2"));
-		user.setRole(rs.getString("usg_codigo"));
+		user.setRole(rs.getString("gru_id"));
 		user.setUserdb(rs.getString("sys"));
 		user.setUsername(rs.getString("us"));
 		user.setState(rs.getInt("state") > 0 ? true : false);

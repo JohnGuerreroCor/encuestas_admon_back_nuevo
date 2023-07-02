@@ -6,37 +6,43 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.usco.edu.dao.IUsuarioDao;
+import com.usco.edu.entities.Role;
 import com.usco.edu.entities.Usuario;
 import com.usco.edu.rowMapper.UsuarioRowMapper;
 
 @Repository
-public class UsuarioDaoImpl implements IUsuarioDao{
-	
+public class UsuarioDaoImpl implements IUsuarioDao {
+
 	@Autowired
-	@Qualifier("JDBCTemplatePlanesLogin")
+	@Qualifier("JDBCTemplateEncuestasLogin")
 	public JdbcTemplate jdbcTemplate;
 
 	@Override
 	public Usuario findByUsername(String username) {
-		String sql = "select * from carnetizacion.usuario_carnetizacion_admon_login uca "
-				+ "inner join uaa u on u.uaa_codigo = uca.usg_uaa "
+
+		String sql = "select * from usuario_encuestas_admin_login us "
+				+ "inner join uaa u on u.uaa_codigo = us.uaa_codigo "
 				+ "inner join sede s on s.sed_codigo = u.sed_codigo "
-				+ "inner join persona p on p.per_codigo = uca.up "
-				+ "where  us = ? ";
+				+ "inner join persona p on p.per_codigo = us.per_codigo " + "where  us = ? ";
 		return jdbcTemplate.queryForObject(sql, new Object[] { username }, new UsuarioRowMapper());
+
 	}
 
+	@Override
+	public Role roles(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public boolean validarUser(String username) {
 		int result = 0;
-		String sql = "select COUNT(us.us) from carnetizacion.usuario_carnetizacion_admon_login us "
-				+ "inner join uaa u on u.uaa_codigo = us.usg_uaa "
+		String sql = "select  COUNT(us.us) from usuario_encuestas_admin_login us "
+				+ "inner join uaa u on u.uaa_codigo = us.uaa_codigo "
 				+ "inner join sede s on s.sed_codigo = u.sed_codigo "
-				+ "inner join persona p on p.per_codigo = us.up "
-				+ "where  us = ? ";
-		result =  jdbcTemplate.queryForObject(sql, new Object[] { username }, Integer.class);
+				+ "inner join persona p on p.per_codigo = us.per_codigo " + "where  us = ? ";
+		result = jdbcTemplate.queryForObject(sql, new Object[] { username }, Integer.class);
 		return result > 0 ? true : false;
 	}
 
-}
+} 

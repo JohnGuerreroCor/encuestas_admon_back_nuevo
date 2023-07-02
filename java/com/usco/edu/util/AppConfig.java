@@ -25,7 +25,7 @@ public class AppConfig {
 	private DataSource dataSource;
 	
 	
-	@Bean(name = "JDBCTemplatePlanesConsulta")
+	@Bean(name = "JDBCTemplateEncuestasLogin")
 	public JdbcTemplate jdbcTemplateConsultasjdbc() throws Exception {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
 		jdbcTemplate.setDataSource(dataSource);

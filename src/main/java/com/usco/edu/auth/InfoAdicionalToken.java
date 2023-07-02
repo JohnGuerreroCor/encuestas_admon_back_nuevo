@@ -11,13 +11,13 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.stereotype.Component;
 
 import com.usco.edu.entities.Usuario;
-import com.usco.edu.service.serviceImpl.UsuarioService;
+import com.usco.edu.service.serviceImpl.UsuarioServiceImpl;
 
 @Component
 public class InfoAdicionalToken implements TokenEnhancer{
 	
 	@Autowired
-	private UsuarioService usuarioService;
+	private UsuarioServiceImpl usuarioService;
 
 	@Override
 	public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
