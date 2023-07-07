@@ -7,12 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
+
 
 public class BaseDato {
 
@@ -27,7 +27,7 @@ public class BaseDato {
 
 			dataSource = (DataSource) ctx.lookup("jboss/datasources/academia3000_jankarlos_consultas");
 
-//			dataSource = (DataSource) ctx.lookup("java:jboss/datasources/CarnetizacionAdmonConsultaDS");
+//			dataSource = (DataSource) ctx.lookup("java:jboss/datasources/encuestas_admon_consultaDS");
 
 			conexion = dataSource.getConnection();
 		} catch (Exception e) {

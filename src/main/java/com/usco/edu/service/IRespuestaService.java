@@ -4,7 +4,11 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.usco.edu.dto.DatosGraficaPreguntaPrincipal;
+import com.usco.edu.dto.ReporteAgrupado;
+import com.usco.edu.dto.ReporteRespuesta;
+import com.usco.edu.entities.Pregunta;
 import com.usco.edu.entities.Respuesta;
+import com.usco.edu.entities.Resultado;
 
 public interface IRespuestaService {
 
@@ -17,6 +21,20 @@ public interface IRespuestaService {
 	int update(Respuesta respuesta);
 
 	int delete(int codigo);
+	
+	//RESULTADOS ENCUESTADOS
+	
+	List<Resultado> obtenerResultados(int cuestionario);
+	
+	//REPORTE AGRUPADO TEXTO Y OPCIONES DE RESPUESTA
+	
+	List<Pregunta> obtenerPreguntasOpcionesCuestionario(int cuestionario);
+		
+	List<Pregunta> obtenerPreguntasTextoCuestionario(int cuestionario);
+		
+	List<ReporteAgrupado> generarDatosReporteAgrupadoTexto(int cuestionario, String preguntas);
+		
+	List<ReporteAgrupado> generarDatosReporteAgrupadoOpciones(int cuestionario, String preguntas);
 	
 	//GENERAL ACREDITACION
 

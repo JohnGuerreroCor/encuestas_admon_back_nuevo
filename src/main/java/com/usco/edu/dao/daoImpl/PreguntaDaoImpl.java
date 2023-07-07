@@ -285,6 +285,7 @@ public class PreguntaDaoImpl implements IPreguntaDao {
 		return lstPregunta;
 
 	}
+	
 	@Override
 	public List<Pregunta> findByCueandSelectOrRadioB(int cues) {
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
@@ -491,7 +492,7 @@ public class PreguntaDaoImpl implements IPreguntaDao {
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("codigo", cuest);
 
-		String sql = "SELECT pre_codigo,pre_descripcion from encuestas.preguntas p where (cue_codigo =:codigo And pre_tipo =0)AND pre_estado=1";
+		String sql = "select pre_codigo,pre_descripcion from encuestas.preguntas p where (cue_codigo =:codigo and pre_tipo = 0) and pre_estado = 1 and p.tre_codigo != 2";
 
 		List<Pregunta> lstPregunta = namedJdbcTemplate.query(sql, parameter, new RowMapper<Pregunta>() {
 

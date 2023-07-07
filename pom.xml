@@ -10,11 +10,11 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>usco.edu.co</groupId>
-	<artifactId>carnetizacion-administrador</artifactId>
+	<artifactId>encuestas-administrador</artifactId>
 	<version>1.0</version>
 	<packaging>war</packaging>
-	<name>carnetizacion-administrador</name>
-	<description>Sistema que comprende toda la informacion de carnetizacion institucional</description>
+	<name>encuestas-administrador</name>
+	<description>Sistema que comprende toda las encuestas institucional</description>
 
 	<properties>
 		<java.version>1.8</java.version>

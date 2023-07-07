@@ -191,10 +191,11 @@ public class CuestionarioConfiguracionDaoImpl implements ICuestionarioConfigurac
 
 	@Override
 	public void delete(int codigo, String userdb) {
+		
 		DataSource dataSource = jdbcComponent.construirDataSourceDeUsuario(userdb);
 		NamedParameterJdbcTemplate jdbc = jdbcComponent.construirTemplatenew(dataSource);
 
-		String sql = "UPDATE encuestas.cuestionario_configuracion SET  cuc_estado=0  WHERE cuc_codigo=:codigo";
+		String sql = "UPDATE encuestas.cuestionario_configuracion SET cuc_estado = 0 WHERE cuc_codigo=:codigo";
 
 		try {
 			MapSqlParameterSource parameter = new MapSqlParameterSource();

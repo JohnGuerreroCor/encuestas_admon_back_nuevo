@@ -21,10 +21,10 @@ public class RespuestaOpcionesController {
 	@Autowired
 	private IRespuestaOpcionesService service;
 
-	@GetMapping(path = "find")
-	public List<RespuestaOpciones> find() {
+	@GetMapping(path = "find/{uaa}")
+	public List<RespuestaOpciones> find(@PathVariable int uaa) {
 
-		return service.find();
+		return service.find(uaa);
 	}
 
 	@GetMapping(path = "find-codigo/{codigo}")

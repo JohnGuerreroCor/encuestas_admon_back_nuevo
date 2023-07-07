@@ -2,6 +2,7 @@ package com.usco.edu.service.serviceImpl;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,13 @@ import com.usco.edu.dao.IReporteRespuestasDao;
 import com.usco.edu.dao.IRespuestaDao;
 import com.usco.edu.dao.IRespuestaOpcionesDao;
 import com.usco.edu.dto.DatosGraficaPreguntaPrincipal;
+import com.usco.edu.dto.ReporteAgrupado;
 import com.usco.edu.dto.ReporteRespuesta;
 import com.usco.edu.dto.ReporteRespuestaDetallado;
 import com.usco.edu.entities.Pregunta;
 import com.usco.edu.entities.Respuesta;
 import com.usco.edu.entities.RespuestaOpciones;
+import com.usco.edu.entities.Resultado;
 import com.usco.edu.service.IRespuestaService;
 import com.usco.edu.util.GenerarReporteExcelPoi;
 import com.usco.edu.util.GenerarReporteExcelDetallado;
@@ -215,6 +218,46 @@ public class RespuestaServiceImpl implements IRespuestaService {
 
 		return datosGrafica;
 
+	}
+	
+	//REPORTE AGRUPADO TEXTO Y OPCIONES DE RESPUESTA
+
+	@Override
+	public List<Pregunta> obtenerPreguntasOpcionesCuestionario(int cuestionario) {
+		
+		return reporteDao.obtenerPreguntasOpcionesCuestionario(cuestionario);
+		
+	}
+
+	@Override
+	public List<Pregunta> obtenerPreguntasTextoCuestionario(int cuestionario) {
+		
+		return reporteDao.obtenerPreguntasTextoCuestionario(cuestionario);
+		
+	}
+
+	@Override
+	public List<ReporteAgrupado> generarDatosReporteAgrupadoTexto(int cuestionario, String preguntas) {
+		
+		return reporteDao.generarDatosReporteAgrupadoTexto(cuestionario, preguntas);
+		
+	}
+
+	@Override
+	public List<ReporteAgrupado> generarDatosReporteAgrupadoOpciones(int cuestionario, String preguntas) {
+		
+		//preguntas = preguntas.replace(",undefined", "");
+		
+		
+		return reporteDao.generarDatosReporteAgrupadoOpciones(cuestionario, preguntas);
+		
+	}
+
+	@Override
+	public List<Resultado> obtenerResultados(int cuestionario) {
+		
+		return reporteDao.obtenerResultados(cuestionario);
+		
 	}
 	
 }

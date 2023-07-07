@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.usco.edu.dto.DatosGraficaPreguntaPrincipal;
+import com.usco.edu.dto.ReporteAgrupado;
+import com.usco.edu.entities.Pregunta;
 import com.usco.edu.entities.Respuesta;
+import com.usco.edu.entities.Resultado;
 import com.usco.edu.service.IRespuestaService;
 
 @RestController
@@ -165,6 +168,44 @@ public class RespuestaRestController {
 	public List<DatosGraficaPreguntaPrincipal> generarDatosGrafica(@PathVariable int cue) {
 
 		return service.datosGrafica(cue);
+	}
+	
+	
+	//REPORTE AGRUPADO TEXTO Y OPCIONES DE RESPUESTA
+	
+	@GetMapping(path = "obtener-preguntas-opciones/{cuestionario}")
+	public List<Pregunta> obtenerPreguntasOpcionesCuestionario(@PathVariable int cuestionario) {
+
+		return service.obtenerPreguntasOpcionesCuestionario(cuestionario);
+
+	}
+	
+	@GetMapping(path = "obtener-preguntas-texto/{cuestionario}")
+	public List<Pregunta> obtenerPreguntasTextoCuestionario(@PathVariable int cuestionario) {
+
+		return service.obtenerPreguntasTextoCuestionario(cuestionario);
+
+	}
+	
+	@GetMapping(path = "generar-reporte-agrupado-texto/{cuestionario}/{preguntas}")
+	public List<ReporteAgrupado> generarDatosReporteAgrupadoTexto(@PathVariable int cuestionario, @PathVariable String preguntas) {
+
+		return service.generarDatosReporteAgrupadoTexto(cuestionario, preguntas);
+
+	}
+	
+	@GetMapping(path = "generar-reporte-agrupado-opciones/{cuestionario}/{preguntas}")
+	public List<ReporteAgrupado> generarDatosReporteAgrupadoOpciones(@PathVariable int cuestionario, @PathVariable String preguntas) {
+
+		return service.generarDatosReporteAgrupadoOpciones(cuestionario, preguntas);
+
+	}
+	
+	@GetMapping(path = "obtener-resultados/{cuestionario}")
+	public List<Resultado> obtenerResultados(@PathVariable int cuestionario) {
+
+		return service.obtenerResultados(cuestionario);
+
 	}
 
 }

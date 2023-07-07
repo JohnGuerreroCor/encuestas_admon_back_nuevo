@@ -49,7 +49,7 @@ public class CuestionarioRestController {
 	}
 
 	@GetMapping(path = "remove/{codigo}/{user}")
-	public int delete(@PathVariable int codigo, @PathVariable String user) {
+	public int remove(@PathVariable int codigo, @PathVariable String user) {
 
 		return service.delete(codigo, user);
 	}

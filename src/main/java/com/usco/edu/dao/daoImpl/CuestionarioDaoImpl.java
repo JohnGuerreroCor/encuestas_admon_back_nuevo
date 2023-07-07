@@ -39,7 +39,10 @@ public class CuestionarioDaoImpl implements ICuestionarioDao {
 		parameter.addValue("uaa", uaa);
 
 		String sql = "SELECT cue_codigo,cue_estado, cue_nombre,cue_instrucciones,uaa_nombre,cue_fecha_fin,cue_fecha_inicio,c.uaa_codigo"
-				+ " from encuestas.cuestionarios c join dbo.uaa u on c.uaa_codigo= u.uaa_codigo where c.cue_estado =1 AND c.uaa_codigo=:uaa";
+				+ " from encuestas.cuestionarios c join dbo.uaa u on c.uaa_codigo= u.uaa_codigo where c.cue_estado = 1";
+		
+		//String sql = "SELECT cue_codigo,cue_estado, cue_nombre,cue_instrucciones,uaa_nombre,cue_fecha_fin,cue_fecha_inicio,c.uaa_codigo"
+			//	+ " from encuestas.cuestionarios c join dbo.uaa u on c.uaa_codigo= u.uaa_codigo where c.cue_estado =1 AND c.uaa_codigo=:uaa";
 
 		List<Cuestionario> lstCuestionario = namedJdbcTemplate.query(sql, parameter, new RowMapper<Cuestionario>() {
 
@@ -286,10 +289,11 @@ public class CuestionarioDaoImpl implements ICuestionarioDao {
 
 	@Override
 	public void delete(int codigo, String userdb) {
+		
 		DataSource dataSource = jdbcComponent.construirDataSourceDeUsuario(userdb);
 		NamedParameterJdbcTemplate jdbc = jdbcComponent.construirTemplatenew(dataSource);
 
-		String sql = "UPDATE encuestas.cuestionarios SET cue_estado=0 WHERE cue_codigo=:codigo";
+		String sql = "UPDATE encuestas.cuestionarios SET cue_estado = 0 WHERE cue_codigo=:codigo";
 
 		try {
 			MapSqlParameterSource parameter = new MapSqlParameterSource();

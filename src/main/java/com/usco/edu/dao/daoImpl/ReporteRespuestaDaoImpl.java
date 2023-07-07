@@ -1,8 +1,12 @@
 package com.usco.edu.dao.daoImpl;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,11 +16,13 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.usco.edu.dao.IReporteRespuestasDao;
+import com.usco.edu.dto.ReporteAgrupado;
 import com.usco.edu.dto.ReporteRespuesta;
 import com.usco.edu.dto.ReporteRespuestaDetallado;
 import com.usco.edu.entities.Cuestionario;
 import com.usco.edu.entities.Pregunta;
 import com.usco.edu.entities.RespuestaOpciones;
+import com.usco.edu.entities.Resultado;
 import com.usco.edu.entities.UsuarioTipo;
 import com.usco.edu.entities.Persona;
 import com.usco.edu.entities.Estudiante;
@@ -545,14 +551,12 @@ public class ReporteRespuestaDaoImpl implements IReporteRespuestasDao {
 		parameter.addValue("pregunta", pregunta);
 		parameter.addValue("rop", rop);
 
-		String sql = "select count(*) as valor from encuestas.respuestas r"
-				+ " join encuestas.respuestas_cuestionarios rc on r.rcu_codigo = rc.rcu_codigo "
+		String sql = "select count(*) as valor from encuestas.respuestas r "
+				+ "join encuestas.respuestas_cuestionarios rc on r.rcu_codigo = rc.rcu_codigo "
 				+ "join encuestas.preguntas_respuestas pr on r.prr_codigo = pr.prr_codigo "
 				+ "join encuestas.respuestas_opciones ro on pr.rop_codigo = ro.rop_codigo "
 				+ "join encuestas.preguntas p on r.pre_codigo =p.pre_codigo "
 				+ "join encuestas.cuestionarios c on rc.cue_codigo = c.cue_codigo "
-				+ "join encuestas.cuestionario_configuracion cc on cc.cue_codigo = c.cue_codigo "
-				+ "join dbo.usuario_tipo tu  on cc.tus_codigo = tu.tus_codigo "
 				+ " where (p.pre_codigo=:pregunta AND ro.rop_codigo=:rop);";
 
 		List<Integer> valores = namedJdbcTemplate.query(sql, parameter, new RowMapper<Integer>() {
@@ -568,6 +572,208 @@ public class ReporteRespuestaDaoImpl implements IReporteRespuestasDao {
 		});
 
 		return valores.get(0);
+	}
+	
+	// REPORTE AGRUPADO TEXTO Y OPCIONES DE RESPUESTA
+
+	@Override
+	public List<Pregunta> obtenerPreguntasOpcionesCuestionario(int cuestionario) {
+		
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("codigo", cuestionario);
+
+		String sql = "select * from encuestas.preguntas p where p.cue_codigo =:codigo and p.pre_estado = 1 and p.tre_codigo != 2";
+
+		List<Pregunta> lstPregunta = namedJdbcTemplate.query(sql, parameter, new RowMapper<Pregunta>() {
+
+			@Override
+			public Pregunta mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+
+				Pregunta pregunta = new Pregunta();
+				pregunta.setCodigo(rs.getLong("pre_codigo"));
+				pregunta.setDescripcion(rs.getString("pre_descripcion"));
+				pregunta.setTextoAdicional(rs.getString("pre_texto_adicional"));
+				pregunta.setTipo(rs.getInt("pre_tipo"));
+				pregunta.setObligatorio(rs.getInt("pre_obligatorio"));
+				pregunta.setDepende(rs.getInt("pre_codigo_depende"));
+				pregunta.setIdentificador(rs.getString("pre_identificador"));
+
+				return pregunta;
+			}
+
+		});
+
+		return lstPregunta;
+
+	}
+
+	@Override
+	public List<Pregunta> obtenerPreguntasTextoCuestionario(int cuestionario) {
+		
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("codigo", cuestionario);
+
+		String sql = "select * from encuestas.preguntas p where p.cue_codigo =:codigo and p.pre_estado = 1 and p.tre_codigo = 2";
+
+		List<Pregunta> lstPregunta = namedJdbcTemplate.query(sql, parameter, new RowMapper<Pregunta>() {
+
+			@Override
+			public Pregunta mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+
+				Pregunta pregunta = new Pregunta();
+				pregunta.setCodigo(rs.getLong("pre_codigo"));
+				pregunta.setDescripcion(rs.getString("pre_descripcion"));
+				pregunta.setTextoAdicional(rs.getString("pre_texto_adicional"));
+				pregunta.setTipo(rs.getInt("pre_tipo"));
+				pregunta.setObligatorio(rs.getInt("pre_obligatorio"));
+				pregunta.setDepende(rs.getInt("pre_codigo_depende"));
+				pregunta.setIdentificador(rs.getString("pre_identificador"));
+
+				return pregunta;
+			}
+
+		});
+
+		return lstPregunta;
+	}
+
+	@Override
+	public List<ReporteAgrupado> generarDatosReporteAgrupadoTexto(int cuestionario, String preguntas) {
+		
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("codigo", cuestionario);
+		parameter.addValue("preguntas", preguntas);
+
+		String sql = "select * from encuestas.preguntas p where p.cue_codigo =:codigo and p.pre_estado = 1 and p.tre_codigo = 2";
+
+		List<ReporteAgrupado> lstPregunta = namedJdbcTemplate.query(sql, parameter, new RowMapper<ReporteAgrupado>() {
+
+			@Override
+			public ReporteAgrupado mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+
+				ReporteAgrupado ReporteAgrupado = new ReporteAgrupado();
+
+				return ReporteAgrupado;
+			}
+
+		});
+
+		return lstPregunta;
+	}
+
+	@Override
+	public List<ReporteAgrupado> generarDatosReporteAgrupadoOpciones(int cuestionario, String preguntas) {
+		
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("codigo", cuestionario);
+		
+		
+		String input = preguntas;
+
+        // Eliminar los corchetes y separar por ","
+        String[] parts = input.replaceAll("[\\[\\]]", "").split(",");
+
+        // Crear un nuevo array para almacenar los valores numéricos
+        int[] numericValues = new int[parts.length];
+
+        // Convertir cada parte en un valor numérico y almacenarlo en el array
+        for (int i = 0; i < parts.length; i++) {
+            numericValues[i] = Integer.parseInt(parts[i]);
+        }
+
+		String sql = "with resultado("
+				+ "  rcu_codigo,"
+				+ "  rcu_fecha,"
+				+ "  tus_nombre,"
+				+ "  pre_codigo,"
+				+ "  rop_descripcion"
+				+ ") as("
+				+ "  select"
+				+ "    rc.rcu_codigo,"
+				+ "    rc.rcu_fecha,"
+				+ "    tu.tus_nombre,"
+				+ "    pr.pre_codigo,"
+				+ "    convert(varchar(40), ro.rop_descripcion, 112)"
+				+ "  from"
+				+ "    encuestas.respuestas_cuestionarios rc"
+				+ "    inner JOIN encuestas.respuestas r on r.rcu_codigo = rc.rcu_codigo"
+				+ "    inner JOIN encuestas.preguntas_respuestas pr on r.prr_codigo = pr.prr_codigo"
+				+ "    inner join encuestas.preguntas p on pr.pre_codigo = p.pre_codigo"
+				+ "    inner JOIN encuestas.respuestas_opciones ro on pr.rop_codigo = ro.rop_codigo"
+				+ "    inner join dbo.usuario_tipo tu on rc.rcu_estamento = tu.tus_codigo"
+				+ "  where"
+				+ "    rc.cue_codigo =:codigo"
+				+ ")"
+				+ "SELECT"
+				+ "  *"
+				+ "from"
+				+ "  resultado pivot(max(rop_descripcion) FOR pre_codigo in (" + preguntas + ")) as pvt";
+
+		List<ReporteAgrupado> lstReporteAgrupado = namedJdbcTemplate.query(sql, parameter, new RowMapper<ReporteAgrupado>() {
+
+			@Override
+			public ReporteAgrupado mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+
+				ReporteAgrupado ReporteAgrupado = new ReporteAgrupado();
+				
+				
+				ReporteAgrupado.setFecha(rs.getDate("rcu_fecha"));
+				ReporteAgrupado.setEstamento(rs.getString("tus_nombre"));
+				
+				 Map<String, String> columnas = new HashMap<>();
+
+	                int columnCount = numericValues.length;
+	                
+	                for (int i = 0; i < columnCount; i++) {
+	                    String columnName = "columna" + i;
+	                    String columnValue = rs.getString(numericValues[i]+"");
+	                    columnas.put(columnName, columnValue);
+	                }
+
+	                ReporteAgrupado.setColumnas(columnas);
+
+
+				
+
+				return ReporteAgrupado;
+			}
+
+		});
+
+		return lstReporteAgrupado;
+	}
+
+	@Override
+	public List<Resultado> obtenerResultados(int cuestionario) {
+		
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("codigo", cuestionario);
+
+		String sql = "select ut.tus_nombre as estamento, count(rc.rcu_codigo) as encuestados from encuestas.respuestas_cuestionarios rc "
+				+ "inner join usuario_tipo ut on rc.rcu_estamento = ut.tus_codigo "
+				+ "where rc.cue_codigo = :codigo "
+				+ "group by ut.tus_nombre ";
+
+		List<Resultado> lstResultado = namedJdbcTemplate.query(sql, parameter, new RowMapper<Resultado>() {
+
+			@Override
+			public Resultado mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+
+				Resultado resultado = new Resultado();
+				resultado.setEstamentos(rs.getString("estamento"));
+				resultado.setResultados(rs.getInt("encuestados"));
+
+				return resultado;
+			}
+
+		});
+
+		return lstResultado;
 	}
 
 }

@@ -18,9 +18,9 @@ public class RespuestaOpcionesServiceImpl implements IRespuestaOpcionesService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<RespuestaOpciones> find() {
+	public List<RespuestaOpciones> find(int uaa) {
 
-		return repo.find();
+		return repo.find(uaa);
 	}
 
 	@Override

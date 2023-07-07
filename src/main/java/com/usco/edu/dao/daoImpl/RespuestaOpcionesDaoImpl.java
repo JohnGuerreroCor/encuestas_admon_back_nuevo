@@ -27,11 +27,18 @@ public class RespuestaOpcionesDaoImpl implements IRespuestaOpcionesDao {
 	private NamedParameterJdbcTemplate namedJdbcTemplate;
 
 	@Override
-	public List<RespuestaOpciones> find() {
+	public List<RespuestaOpciones> find(int uaa) {
+		
+		MapSqlParameterSource parameter = new MapSqlParameterSource();
+		parameter.addValue("uaa", uaa);
 
-		String sql = "SELECT * from encuestas.respuestas_opciones ro where ro.rop_estado =1";
+		String sql = "select DISTINCT ro.rop_codigo, CONVERT( VARCHAR(MAX),ro.rop_descripcion) as rop_descripcion, ro.rop_estado from encuestas.respuestas_opciones ro "
+				+ "inner join encuestas.preguntas_respuestas pr on ro.rop_codigo = pr.rop_codigo "
+				+ "inner join encuestas.preguntas p on pr.pre_codigo = p.pre_codigo "
+				+ "inner join encuestas.cuestionarios c on p.cue_codigo = c.cue_codigo "
+				+ "where ro.rop_estado = 1 and c.uaa_codigo =:uaa";
 
-		List<RespuestaOpciones> lstRespuestaOpciones = namedJdbcTemplate.query(sql, new RowMapper<RespuestaOpciones>() {
+		List<RespuestaOpciones> lstRespuestaOpciones = namedJdbcTemplate.query(sql, parameter, new RowMapper<RespuestaOpciones>() {
 
 			@Override
 			public RespuestaOpciones mapRow(ResultSet rs, int rowNum) throws SQLException {

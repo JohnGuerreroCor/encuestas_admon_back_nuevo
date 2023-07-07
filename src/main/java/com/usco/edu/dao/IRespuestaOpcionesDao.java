@@ -6,7 +6,7 @@ import com.usco.edu.entities.RespuestaOpciones;
 
 public interface IRespuestaOpcionesDao {
 
-	List<RespuestaOpciones> find();
+	List<RespuestaOpciones> find(int uaa);
 
 	RespuestaOpciones findByCode(int codigo);
 
