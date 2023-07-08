@@ -1,9 +1,7 @@
 package com.usco.edu.dao.daoImpl;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -644,24 +642,80 @@ public class ReporteRespuestaDaoImpl implements IReporteRespuestasDao {
 		
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("codigo", cuestionario);
-		parameter.addValue("preguntas", preguntas);
+		
+		
+		String input = preguntas;
 
-		String sql = "select * from encuestas.preguntas p where p.cue_codigo =:codigo and p.pre_estado = 1 and p.tre_codigo = 2";
+        // Eliminar los corchetes y separar por ","
+        String[] parts = input.replaceAll("[\\[\\]]", "").split(",");
 
-		List<ReporteAgrupado> lstPregunta = namedJdbcTemplate.query(sql, parameter, new RowMapper<ReporteAgrupado>() {
+        // Crear un nuevo array para almacenar los valores numéricos
+        int[] numericValues = new int[parts.length];
+
+        // Convertir cada parte en un valor numérico y almacenarlo en el array
+        for (int i = 0; i < parts.length; i++) {
+            numericValues[i] = Integer.parseInt(parts[i]);
+        }
+
+		String sql = "with resultado("
+				+ "  rcu_codigo,"
+				+ "  rcu_fecha,"
+				+ "  tus_nombre,"
+				+ "  pre_codigo,"
+				+ "  res_texto"
+				+ ") as("
+				+ "  select"
+				+ "    rc.rcu_codigo,"
+				+ "    rc.rcu_fecha,"
+				+ "    tu.tus_nombre,"
+				+ "    p.pre_codigo,"
+				+ "    r.res_texto"
+				+ "  from"
+				+ "    encuestas.respuestas_cuestionarios rc"
+				+ "    inner JOIN encuestas.respuestas r on r.rcu_codigo = rc.rcu_codigo"
+				+ "    inner join encuestas.preguntas p on r.pre_codigo = p.pre_codigo"
+				+ "    inner join dbo.usuario_tipo tu on rc.rcu_estamento = tu.tus_codigo"
+				+ "  where"
+				+ "    rc.cue_codigo =:codigo"
+				+ ")"
+				+ "SELECT"
+				+ "  *"
+				+ "from"
+				+ "  resultado pivot(max(res_texto) FOR pre_codigo in (" + preguntas + ")) as pvt";
+
+		List<ReporteAgrupado> lstReporteAgrupado = namedJdbcTemplate.query(sql, parameter, new RowMapper<ReporteAgrupado>() {
 
 			@Override
 			public ReporteAgrupado mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 
 				ReporteAgrupado ReporteAgrupado = new ReporteAgrupado();
+				
+				
+				ReporteAgrupado.setFecha(rs.getDate("rcu_fecha"));
+				ReporteAgrupado.setEstamento(rs.getString("tus_nombre"));
+				
+				 Map<String, String> columnas = new HashMap<>();
+
+	                int columnCount = numericValues.length;
+	                
+	                for (int i = 0; i < columnCount; i++) {
+	                    String columnName = "columna" + i;
+	                    String columnValue = rs.getString(numericValues[i]+"");
+	                    columnas.put(columnName, columnValue);
+	                }
+
+	                ReporteAgrupado.setColumnas(columnas);
+
+
+				
 
 				return ReporteAgrupado;
 			}
 
 		});
 
-		return lstPregunta;
+		return lstReporteAgrupado;
 	}
 
 	@Override

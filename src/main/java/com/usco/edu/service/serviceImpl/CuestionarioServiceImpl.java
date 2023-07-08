@@ -27,12 +27,10 @@ public class CuestionarioServiceImpl implements ICuestionarioService {
 	public Cuestionario findByCodigo(Long codigo) {
 
 		try {
-			System.out.println("hizo la busqueda + " + codigo);
 			return dao.findByCodigo(codigo);
 
 		} catch (Exception e) {
 
-			System.out.println("Nokas");
 			return null;
 
 		}
