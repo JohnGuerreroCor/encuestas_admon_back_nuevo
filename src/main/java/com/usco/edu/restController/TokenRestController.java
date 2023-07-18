@@ -67,7 +67,7 @@ public class TokenRestController {
 	}
 	
 	private String generartoken(Usuario usuarioLogueado , String ip ) {
-		String aplicativo = "74";
+		String aplicativo = "77";
 		System.out.println(aplicativo+""+usuarioLogueado.getId() + ip);
 		String tokenSesion = administrativoService.getTokenInicioSesion(aplicativo+""+usuarioLogueado.getId() + ip , usuarioLogueado.getUsername());		
 		String url  = administrativoService.urltokenPeticion(usuarioLogueado.getUsername()) + "api/generarCodigo";
@@ -111,7 +111,7 @@ public class TokenRestController {
 	}
 	
 	private boolean validarToken(Usuario usuarioLogueado , String ip , String CodigoVerificacion ) {
-		String aplicativo = "74";
+		String aplicativo = "77";
 		String tokenSesion = administrativoService.getTokenInicioSesion(aplicativo+""+usuarioLogueado.getId() + ip , usuarioLogueado.getUsername());	
 		String url  = administrativoService.urltokenPeticion(usuarioLogueado.getUsername()) + "api/validarCodigo";
 		String tokenSesionbase64 = Base64.getEncoder().encodeToString(tokenSesion.getBytes());
