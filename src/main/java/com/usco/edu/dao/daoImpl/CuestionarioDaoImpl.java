@@ -37,12 +37,29 @@ public class CuestionarioDaoImpl implements ICuestionarioDao {
 
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("uaa", uaa);
+		
+		//DESCOMENTAR EN PRUEBAS PARA ACCEDER A LOS DISITINTOS CUESTIONARIOS Y COMENTAR LA SEGUNDA STRING QUERY
 
 		//String sql = "SELECT cue_codigo,cue_estado, cue_nombre,cue_instrucciones,uaa_nombre,cue_fecha_fin,cue_fecha_inicio,c.uaa_codigo"
 			//	+ " from encuestas.cuestionarios c join dbo.uaa u on c.uaa_codigo= u.uaa_codigo where c.cue_estado = 1";
 		
-		String sql = "SELECT cue_codigo,cue_estado, cue_nombre,cue_instrucciones,uaa_nombre,cue_fecha_fin,cue_fecha_inicio,c.uaa_codigo"
-				+ " from encuestas.cuestionarios c join dbo.uaa u on c.uaa_codigo= u.uaa_codigo where c.cue_estado =1 AND c.uaa_codigo=:uaa";
+		String sql = "select"
+				+ "  cue_codigo,"
+				+ "  cue_estado,"
+				+ "  cue_nombre,"
+				+ "  cue_instrucciones,"
+				+ "  uaa_nombre,"
+				+ "  cue_fecha_fin,"
+				+ "  cue_fecha_inicio,"
+				+ "  c.uaa_codigo "
+				+ "from"
+				+ "  encuestas.cuestionarios c"
+				+ "  join dbo.uaa u on c.uaa_codigo = u.uaa_codigo "
+				+ "where"
+				+ "  c.cue_estado = 1"
+				+ "  AND c.uaa_codigo = :uaa "
+				+ "order by"
+				+ "  c.cue_codigo desc";
 
 		List<Cuestionario> lstCuestionario = namedJdbcTemplate.query(sql, parameter, new RowMapper<Cuestionario>() {
 

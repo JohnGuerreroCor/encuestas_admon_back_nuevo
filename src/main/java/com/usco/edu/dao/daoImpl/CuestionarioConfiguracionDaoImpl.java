@@ -39,10 +39,29 @@ public class CuestionarioConfiguracionDaoImpl implements ICuestionarioConfigurac
 		MapSqlParameterSource parameter = new MapSqlParameterSource();
 		parameter.addValue("uaa", uaa);
 
-		String sql = "SELECT cuc_codigo, cuc_estado, ca.uaa_codigo, ca.cue_codigo,us.tus_codigo,us.tus_nombre, fecha_registro,cue_nombre,uaa_nombre,v.vin_codigo,"
-				+ "vin_nombre FROM " + "encuestas.cuestionario_configuracion ca   join encuestas.cuestionarios c on "
-				+ " ca.cue_codigo =c.cue_codigo full join dbo.uaa u on ca.uaa_codigo =u.uaa_codigo   join"
-				+ "	 dbo.usuario_tipo us on ca.tus_codigo =us.tus_codigo left join vinculacion v on v.vin_codigo=ca.vin_codigo  where cuc_estado=1 AND c.uaa_codigo=:uaa";
+		String sql = "select "
+				+ "  cuc_codigo, "
+				+ "  cuc_estado, "
+				+ "  ca.uaa_codigo, "
+				+ "  ca.cue_codigo, "
+				+ "  us.tus_codigo, "
+				+ "  us.tus_nombre, "
+				+ "  fecha_registro, "
+				+ "  cue_nombre, "
+				+ "  uaa_nombre, "
+				+ "  v.vin_codigo, "
+				+ "  vin_nombre "
+				+ "from "
+				+ "  encuestas.cuestionario_configuracion ca "
+				+ "  join encuestas.cuestionarios c on ca.cue_codigo = c.cue_codigo full "
+				+ "  join dbo.uaa u on ca.uaa_codigo = u.uaa_codigo "
+				+ "  join dbo.usuario_tipo us on ca.tus_codigo = us.tus_codigo "
+				+ "  left join vinculacion v on v.vin_codigo = ca.vin_codigo "
+				+ "where "
+				+ "  cuc_estado = 1 "
+				+ "  AND c.uaa_codigo = :uaa "
+				+ "order by "
+				+ "  ca.cuc_codigo desc";
 
 		List<CuestionarioConfiguracion> lstCuestionario = namedJdbcTemplate.query(sql,parameter,
 				new RowMapper<CuestionarioConfiguracion>() {
