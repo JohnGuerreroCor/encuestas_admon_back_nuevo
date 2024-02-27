@@ -25,7 +25,7 @@ public class BaseDato {
 
 			DataSource dataSource = null;
 
-			dataSource = (DataSource) ctx.lookup("jboss/datasources/academia3000_jankarlos_consultas");
+			dataSource = (DataSource) ctx.lookup("jboss/datasources/ConsultaDS");
 
 //			dataSource = (DataSource) ctx.lookup("java:jboss/datasources/encuestas_admon_consultaDS");
 

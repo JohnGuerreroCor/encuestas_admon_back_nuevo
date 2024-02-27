@@ -24,8 +24,7 @@ public class AppConfig {
 	private String datasourceLocal;
 
 	@Autowired
-	private DataSource dataSource;// DataSource de las Consultas (No LOGIN) lo crea Spring automaticamente con los
-									// datos del Aplication properties
+	private DataSource dataSource;
 
 	@Bean(name = "JDBCTemplateEncuestasConsulta")
 	public NamedParameterJdbcTemplate jdbcTemplateConsulta() throws Exception {
@@ -40,13 +39,7 @@ public class AppConfig {
 
 		if (perfilSeleccionado.equals("local")) {
 
-//			DriverManagerDataSource dataSourceM = new DriverManagerDataSource();
-//			dataSourceM.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-//			dataSourceM.setUrl(datasourceLocal);
-////
-//			dataSource = dataSourceM;
-
-			dataSource = (DataSource) new JndiTemplate().lookup("jboss/datasources/academia3000_jankarlos");
+			dataSource = (DataSource) new JndiTemplate().lookup("jboss/datasources/LoginDS");
 
 		} else if (perfilSeleccionado.equals("test") || perfilSeleccionado.equals("produccion")) {
 
